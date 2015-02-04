@@ -43,8 +43,8 @@ Z_l = [[eye(L) zeros(L,M-L)]; zeros(M-L,M)];
 V_hbTs = W_hTr * H_hTs;
 V_ebTs = W_eTr * H_eTs;
 
-V_hTs = Z_w*V_hbTs + Z_h*V_hTsTot;
-V_eTs = Z_w*V_ebTs + Z_h*V_eTsTot;
+V_hTs = Z_w*V_hbTs + Z_n*V_hTsTot;
+V_eTs = Z_w*V_ebTs + Z_n*V_eTsTot;
 
 V_test = V_hTs .* V_eTs;
 Phi_test = [eye(L); A_phi'] * exp(1i*Phi_lTs);

@@ -35,8 +35,8 @@ if(exist([dcmpPath,'\WH_Tr.mat'],'file'))
     display('^^^Skipping^^^');
     load([dcmpPath,'\WH_Tr.mat']);
 else
-    [W_eTr,H_eTr] = nmf_kl_con(V_eTrTot, 46);
-    [W_hTr,H_hTr] = nmf_kl_con(V_hTrTot, 46);
+    [W_eTr,H_eTr] = nmf_kl_con(V_eTrTot, 50, 'win', 8);
+    [W_hTr,H_hTr] = nmf_kl_con(V_hTrTot, 100, 'win', 1);
     save([dcmpPath,'\WH_Tr.mat'],'W_eTr','H_eTr','W_hTr','H_hTr');
 end
 
@@ -49,29 +49,3 @@ end
 
 % Test the testing V matrices
 testTstMat(dcmpPath, paths, saveTsFileName, Phi_tr);
-
-% [V_eTsTot, V_hTsTot, Phi_ts] = makeVmat(paths, saveTsFileName, monoMode);
-% if(length(V_eTsTot)>1)
-%     save(saveTsFileName,'V_eTsTot','V_hTsTot','Phi_ts');
-% else
-%     load(saveTsFileName);
-% end
-% 
-% if(exist([dcmpPath,'\WH_Ts.mat'],'file'))
-%     display('^^^Skipping^^^');
-%     load([dcmpPath,'\WH_Ts.mat']);
-% else
-%     [W_eTs,H_eTs] = nmf_kl_con(V_eTsTot, 46);
-%     [W_hTs,H_hTs] = nmf_kl_con(V_hTsTot, 46);
-%     save([dcmpPath,'\WH_Ts.mat'],'W_eTs','H_eTs','W_hTs','H_hTs');
-% end
-% 
-% V_eTst = W_eTr * H_eTs;
-% V_hTst = W_hTr * H_hTs;
-% V_tst = V_hTst .* V_eTst;
-% clear V_eTst V_hTst V_eTrTot V_eTsTot V_hTrTot V_hTsTot H_eTr H_hTr H_eTs H_hTs;
-% 
-% Z = V_tst.*exp(1i*Phi_ts);
-% [x_res] = istft(Z,512,512,128);
-
-a = 1;

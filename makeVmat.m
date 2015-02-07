@@ -40,7 +40,7 @@ for i=1:length(paths)
     % Generate filter matrices Z_e and Z_h
     M = size(V_w,1);
     N = size(V_w,2);
-    K = round(M/3);
+    K = 85;
    
     Z_h = [zeros(K, N);ones(M-K, N)];
     Z_e = [ones(K, N);zeros(M-K, N)];
@@ -52,24 +52,25 @@ for i=1:length(paths)
     
     if(dataType==1)
         L = round(size(V_w,1)/2);
+%         L = 120;
         Z_n = [[eye(L) zeros(L,M-L)]; zeros(M-L,M)];
         Z_w = [zeros(L,M);[zeros(M-L,L) eye(M-L)]];
     
         V_Zw_Vew = Z_w * V_ew;
-        V_Ze_Ven = Z_n * V_en;
+        V_Zn_Ven = Z_n * V_en;
         V_Zw_Vhw = Z_w * V_hw;
         V_Zn_Vhn = Z_n * V_hn;
         Phi_w_Zw = Z_w * Phi_w;
         Phi_n_Zn = Z_n * Phi_n;
 
         if ~exist('V_eTot', 'var')
-            V_eTot = V_Zw_Vew + V_Ze_Ven;
+            V_eTot = V_Zw_Vew + V_Zn_Ven;
             V_hTot = V_Zw_Vhw + V_Zn_Vhn;
             Phi = Phi_w_Zw + Phi_n_Zn;
         else
             V_eExst = V_eTot;
             V_hExst = V_hTot;
-            V_eTot = [V_eExst, V_Zw_Vew + V_Ze_Ven];
+            V_eTot = [V_eExst, V_Zw_Vew + V_Zn_Ven];
             V_hTot = [V_hExst, V_Zw_Vhw + V_Zn_Vhn];
             Phi_exst = Phi;
             Phi = [Phi_exst, Phi_w_Zw + Phi_n_Zn];
@@ -79,6 +80,7 @@ for i=1:length(paths)
             V_eTot = V_en;
             V_hTot = V_hn;
             Phi = Phi_n;
+            x_test = x_e;
         else
             V_eExst = V_eTot;
             V_hExst = V_hTot;
@@ -86,26 +88,12 @@ for i=1:length(paths)
             V_hTot = [V_hExst, V_hn];
             Phi_exst = Phi;
             Phi = [Phi_exst, Phi_n];
+            x_tmp = x_test;
+            x_test = [x_tmp; x_e];
         end
     end
-        
-%     subplot(2,3,1);
-%     imagesc(20*log10(V_Zw_Vew));
-%     colorbar;
-%     subplot(2,3,2);
-%     imagesc(20*log10(V_Ze_Ven));
-%     colorbar;
-%     subplot(2,3,3);
-%     imagesc(20*log10(V_eTot));
-%     colorbar;
-%     subplot(2,3,4);
-%     imagesc(20*log10(V_Zw_Vhw));
-%     colorbar;
-%     subplot(2,3,5);
-%     imagesc(20*log10(V_Zn_Vhn));
-%     colorbar;
-%     subplot(2,3,6);
-%     imagesc(20*log10(V_hTot));
-%     colorbar;
-
+    
+    if(dataType==2)
+        wavwrite(x_test, 16000, 'D:\Temp\NNMF\result\noisy_mono.wav');
+    end
 end
